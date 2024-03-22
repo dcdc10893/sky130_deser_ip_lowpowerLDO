@@ -77,7 +77,7 @@ C {code.sym} 330 -410 2 1 {name=s1 only_toplevel=false value= "
 	dowhile run <=100
 		save  all
 		
-		tran 100u 100000u uic
+		tran 10u 1000u uic
 		remzerovec
 		write LDO_v1_lineregulation.raw
 		set appendwrite
@@ -115,4 +115,4 @@ value=\{Rout\}
 footprint=1206
 device=resistor
 m=1}
-C {/home/dcdc/xschem-src/Work1/chipalooza2024/sky130_deser_ip_lowpowerLDO/xschem/LDO_1.sym} 410 -230 0 0 {name=x1}
+C {/home/dcdc/xschem-src/Work1/chipalooza2024/sky130_deser_ip_lowpowerLDO/xschem/LDO_3.sym} 410 -230 0 0 {name=x1}

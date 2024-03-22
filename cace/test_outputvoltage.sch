@@ -102,4 +102,4 @@ value=\{Rout\}
 footprint=1206
 device=resistor
 m=1}
-C {/home/dcdc/xschem-src/Work1/chipalooza2024/sky130_deser_ip_lowpowerLDO/xschem/LDO_1.sym} 410 -230 0 0 {name=x1}
+C {/home/dcdc/xschem-src/Work1/chipalooza2024/sky130_deser_ip_lowpowerLDO/xschem/LDO_3.sym} 410 -230 0 0 {name=x1}
