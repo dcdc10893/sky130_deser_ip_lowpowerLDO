@@ -1,0 +1,450 @@
+#--------------------------------------------------------------
+# CACE circuit characterization file
+#--------------------------------------------------------------
+
+name:		sky130_deser_ip_lowpowerLDO
+description:	Rail-to-rail driver instrumentation amplifier
+commit:		N/A
+PDK:		sky130A
+
+cace_format:	4.0
+
+authorship {
+	designer:	Doğancan Eser
+	company:	Efabless Corporation
+	creation_date:	January 5, 2024
+	license:	Apache 2.0
+}
+
+# Paths to various files
+
+paths {
+	root:		..
+	documentation:	doc
+	schematic:	xschem
+	magic:		mag
+	layout:		gds
+	netlist:	netlist
+	testbench:	cace
+	simulation:	ngspice
+        reports:	reports
+	plots:		plots
+	logs:		ngspice/log
+}
+
+# Project dependencies
+
+dependencies {
+}
+
+# Pin names and descriptions
+
+pins {
+	name:		ena
+	description:	Enable input (active low)
+	type:		digital
+	direction:	input
+	Vmin:		vss - 0.3
+	Vmax:		vdd + 0.3
+	note:		May be 1.8V or 3.3V signal
+
+ 	+ 	
+ 	
+	name:		Vref
+	description:	Reference Voltage from BGR
+	type:		signal
+	direction:	inout
+	Vmin:		1.2
+	Vmax:		1.2
+
+ 	+
+	name:		avss
+	description:	Analog ground
+	type:		ground
+	direction:	inout
+	Vmin:		-0.3
+	Vmax:		0.3
+	
+	+
+	name:		dvss
+	description:	Digital ground
+	type:		ground
+	direction:	inout
+	Vmin:		-0.3
+	Vmax:		0.3
+	+
+	name:		avdd
+	description:	Analog power supply
+	type:		power
+	direction:	inout
+	Vmin:		3.0
+	Vmax:		3.6
+	
+	+
+	name:		dvdd
+	description:	Digital power supply
+	type:		power
+	direction:	inout
+	Vmin:		3.0
+	Vmax:		3.6
+
+	+
+	name:		Vout
+	description:	Output Voltage
+	type:		power
+	direction:	out
+	Vmin:		1.75
+	Vmax:		1.85
+}
+
+# Default values for electrical parameter measurement conditions
+# if not otherwise specified
+
+default_conditions {
+	name:		Vvdd
+	description:	Analog power supply voltage
+	display:	vdd
+	unit:		V
+	typical:	3.3
+
+	+
+	name:		Vvss
+	description:	Analog ground
+	display:	vss
+	unit:		V
+	typical:	0
+
+	+
+	name:		Vdvdd
+	description:	Digital power supply voltage
+	display:	dvdd
+	unit:		V
+	typical:	1.8
+	note:		Reference voltage for the enable input
+
+	+
+	name:		Rout
+	description:	Output load resistance
+	display:	RLoad
+	unit:		k{ohms}
+	typical:	22
+
+	+
+	name:		Cout
+	description:	Output load capacitance
+	display:	CLoad
+	unit:		uF
+	maximum:	2.2
+
+	+
+	name:		VVena
+	description:	Amplifier enable
+	display:	Vena
+	typical:	0
+	
+	+
+	name:		VVref
+	description:	Amplifier enable
+	display:	Vref
+	typical:	1.2
+	
+	
+	+
+	name:		temperature
+	description:	Ambient temperature
+	display:	Temp
+	unit:		{degrees}C
+	minimum:	-40
+	typical:	27
+	maximum:	130
+
+	+
+	name:		corner
+	description:	Process corner
+	display:	Corner
+	minimum:	ss
+	typical:	tt
+	maximum:	ff
+
+	+
+	name:		iterations
+	description:	Iterations to run
+	display:	Iterations
+	minimum:	1
+	maximum:	20
+	step:		linear
+	stepsize:	1
+}
+
+# List of electrical parameters to be measured and their specified limits
+
+electrical_parameters {
+	name:		out
+	description:	Vout test 
+	display:	Vout for Vin 3V to 5V
+	unit: 		V
+	spec {
+		minimum:	1.75    fail
+		typical:	1.8
+		maximum:	1.85	fail
+	}
+	simulate {
+		tool:		ngspice
+		template:	test_temp1.spice
+		format:		ascii .data null result
+	}
+	conditions {
+		
+		name: Vvdd
+		maximum: 5.1
+		typical: 3.3
+		minimum: 3.0
+
+		+
+		name: temperature
+		typical: 27
+
+		+
+		name: corner
+		minimum: ss
+		typical: tt
+		maximum: ff
+	}
+	
+	+
+	
+	name:		out2
+	description:	Temperature Test
+	display:	Temperature Test
+	unit: 		V
+	spec {
+		minimum:	1.75    fail
+		typical:	1.8
+		maximum:	1.85	fail
+	}
+	simulate {
+		tool:		ngspice
+		template:	test_temp1.spice
+		format:		ascii .data null result
+	}
+	conditions {
+		
+		name: Vvdd
+		typical: 3.3
+		
+
+		+
+		name: temperature
+		minimum: -40
+		typical: 27
+		maximum: +85
+
+		+
+		name: corner
+		minimum: ss
+		typical: tt
+		maximum: ff
+	}
+
+	+
+	
+	name:		out3
+	description:	Output capacitance
+	display:	Output Cap 1uF to 10uF 
+	unit: 		V
+	spec {
+		minimum:	1.75    fail
+		typical:	1.8
+		maximum:	1.85	fail
+	}
+	simulate {
+		tool:		ngspice
+		template:	test_temp1.spice
+		format:		ascii .data null result
+	}
+	conditions {
+		
+		name: Vvdd
+		typical: 3.3
+		
+
+		+
+		name: Cout
+		minimum: 1
+		typical: 2.2
+		maximum: 10
+
+		+
+		name: corner
+		minimum: ss
+		typical: tt
+		maximum: ff
+	}
+
+	+
+	
+	name:		out4
+	description:	Rout
+	display:	Rout 18k to 36k
+	unit: 		V
+	spec {
+		minimum:	1.75    fail
+		typical:	1.8
+		maximum:	1.85	fail
+	}
+	simulate {
+		tool:		ngspice
+		template:	test_temp1.spice
+		format:		ascii .data null result
+	}
+	conditions {
+		
+		name: Rout
+		minimum: 18
+		typical: 22
+		typical: 36
+		
+		+
+		name: temperature
+		typical: 27
+		
+		+
+		name: corner
+		minimum: ss
+		typical: tt
+		maximum: ff
+	}
+
+	+
+	
+	name:		out5
+	description:	Iout
+	display:	Iout for Rout 18k to 36k
+	unit: 		{micro}A
+	spec {
+		minimum:	45    fail
+		typical:	80
+		maximum:	105	fail
+	}
+	simulate {
+		tool:		ngspice
+		template:	test_temp3.spice
+		format:		ascii .data null result
+	}
+	conditions {
+		
+		name: Rout
+		minimum: 18
+		typical: 22
+		typical: 36
+		+
+		name: temperature
+		typical: 27
+		+
+		name: corner
+		minimum: ss
+		typical: tt
+		maximum: ff
+		
+	}
+
+	+
+	
+	name:		out6
+	description:	Iout
+	display:	Quescient Current for Rout 1000000k
+	unit: 		{micro}A
+	spec {
+		minimum:	1    fail
+		typical:	2
+		maximum:	3	fail
+	}
+	simulate {
+		tool:		ngspice
+		template:	test_temp3.spice
+		format:		ascii .data null result
+	}
+	conditions {
+		
+		name: Rout
+		typical: 1000000
+		+
+		name: temperature
+		typical: 27
+		+
+		name: corner
+		minimum: ss
+		typical: tt
+		maximum: ff
+		
+	}
+	+
+	
+	name:		out7
+	description:	PSRR
+	display:	PSRR
+	unit: 		dB
+	spec {
+		minimum:	-40    fail
+		typical:	-50
+		maximum:	-60	fail
+	}
+	simulate {
+		tool:		ngspice
+		template:	test_temp4.spice
+		format:		ascii .data null result
+	}
+	conditions {
+		
+		
+		name: temperature
+		typical: 27
+		+
+		name: corner
+		minimum: ss
+		typical: tt
+		maximum: ff
+		
+	}
+
+
+}
+
+# List of physical parameters to be measured and their specified limits
+
+physical_parameters {
+	name:		area
+	status:		skip
+	description:	Total circuit layout area
+	display:	area
+	unit: 		{micro}m{squared}
+	spec {
+		maximum:	50000	fail
+	}
+	evaluate {
+		tool:		cace_area
+	}
+
+	+
+	name:		LVS_errors
+	description:	LVS errors
+	display:	LVS errors
+	spec {
+		maximum:	0	fail
+	}
+	evaluate {
+		tool:		cace_lvs run_project_lvs.tcl
+	}
+
+	+
+	name:		DRC_errors
+	status:		skip
+	description:	DRC errors
+	display:	DRC errors
+	spec {
+		maximum:	0	fail
+	}
+	evaluate {
+		tool:		cace_drc
+	}
+}
